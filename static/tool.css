@@ -13,7 +13,6 @@ nav.navbar {
 }
 
 .langname {
-  text-align: center;
   font-size: 150%;
 }
 
@@ -30,16 +29,17 @@ nav.navbar {
   font-family: var(--font-family-monospace);
 }
 
-div.verifybox {
+#verifybox {
   width: 20rem;
   max-width: 20rem;
   float: right;
   box-shadow: 0 15px 45px #aaa, 0 5px 5px 0px #ccc;
   border-radius: 1rem;
   padding: 1rem;
+  margin: 0 0 1rem 1rem;
 }
 
-div.verifybox ul {
+#verifybox ul {
   margin-bottom: 0;
 }
 
@@ -121,4 +121,13 @@ aside.open {
   transition: stroke-dashoffset 2s;
   transform: rotate(-90deg);
   transform-origin: 50% 50%;
+}
+
+@media screen and (max-width: 50rem) {
+  #verifybox {
+    width: 100%;
+    max-width: 100%;
+    float: none;
+    margin: 2rem 0;
+  }
 }

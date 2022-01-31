@@ -271,7 +271,7 @@ def build_content(langcode):
         content.append(infobox.format("wellformed", "A well-formed language code conists of 2 letters (ISO 639-1) or three letters (ISO 639-3), and optionally has one or more subtags separated by hyphens. The code you entered does not conform to this."))
         return Markup("\n".join(content))
     else:
-        verifybox = "<div class='verifybox'>\nVerify this language code:\n<ul>\n"
+        verifybox = "<div id='verifybox'>\nVerify this language code:\n<ul>\n"
         if len(results["lang"]) == 3:
             verifybox += "<li><a href='https://iso639-3.sil.org/code/{0}'>SIL (ISO 639-3 RA)</a></li>\n".format(results["lang"])
         if results["actual"]:
