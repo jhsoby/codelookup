@@ -26,6 +26,15 @@
           targetElem.classList.toggle( 'open' );
         });
       });
+      
+      document.querySelectorAll( 'svg.progress-ring' ).forEach( function( item ) {
+        const circle = item.querySelector( '.progress-ring__circle' );
+        const radius = circle.r.baseVal.value;
+        const circumference = radius * 2 * Math.PI;
+        const percentage = item.getAttribute( 'data-percentage' );
+        const offset = circumference - percentage / 100 * circumference;
+        circle.style.strokeDashoffset = offset;
+      });
     });
     </script>
   </head>
@@ -57,16 +66,6 @@
       <div>{{ content }}</div>
       {% endif %}
     </main>
-    <script>
-    document.querySelectorAll( 'svg.progress-ring' ).forEach( function( item ) {
-      const circle = item.querySelector( '.progress-ring__circle' );
-      const radius = circle.r.baseVal.value;
-      const circumference = radius * 2 * Math.PI;
-      const percentage = item.getAttribute( 'data-percentage' );
-      const offset = circumference - percentage / 100 * circumference;
-      circle.style.strokeDashoffset = offset;
-    });
-    </script>
     <script defer src="{{ url_for('static', filename='menu.js') }}"></script>
   </body>
 </html>
