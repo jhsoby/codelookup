@@ -4,7 +4,7 @@
 My super duper codelookup replacement.
 """
 
-from flask import Flask, render_template, Markup
+from flask import Flask, redirect, render_template, request, url_for, Markup
 import time
 import requests
 import json
@@ -348,5 +348,7 @@ def build_content(langcode):
 @app.route("/", methods=["GET", "POST"], defaults={"path": ""})
 @app.route("/<path>", methods=["GET", "POST"])
 def index(path):
+    if path == '' and 'langcode' in request.args:
+        return redirect(url_for('index', path=request.args['langcode']))
     path = path[:20]
     return render_template("index.html", langcode=path, content=build_content(path))
