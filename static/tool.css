@@ -47,6 +47,10 @@ div.groupstatbox {
   margin: 0 0 1em 2em;
 }
 
+table.table td {
+  vertical-align: middle;
+}
+
 td.row-project {
   background-repeat: no-repeat;
   background-size: 24px;
