@@ -12,6 +12,11 @@ nav.navbar {
   top: 0;
 }
 
+.langname {
+  text-align: center;
+  font-size: 150%;
+}
+
 .statlink {
   margin-right: 1em;
 }

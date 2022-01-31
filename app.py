@@ -53,7 +53,7 @@ def get_language_code(code, state="code"):
         return "INVALID"
 
 def get_code_data(lang):
-    api = "https://hub.toolforge.org/{}:{}?format=json"
+    api = "https://hub.toolforge.org/{}:{}?format=json&lang=en"
     if len(lang) == 2:
         api = api.format("P218", lang)
     else:
@@ -157,6 +157,7 @@ def get_everything(langcode):
         "cachetime": time.time(),
         "code": code,
         "lang": lang,
+        "languagename": "<i>(unknown)</i>",
         "sitecode": sitecode,
         "wellformed": False,
         "actual": False,
@@ -183,6 +184,7 @@ def get_everything(langcode):
     
     if get_code_data(lang):
         res["actual"] = get_code_data(lang)["origin"]["qid"]
+        res["languagename"] = get_code_data(lang)["destination"]["preferredSitelink"]["title"]
     
     twnstats = get_twn_stats(code)
     groups_to_find = ["core-0-mostused", "core", "ext-proofreadpage-user", "ext-collection-user", "wikimedia-main", "out-wikimedia-mobile-wikipedia-android-strings", "out-wikimedia-mobile-wikipedia-ios"]
@@ -280,6 +282,7 @@ def build_content(langcode):
         content.append(infobox.format("wellformed", "A well-formed language code consists of 2 letters (ISO 639-1) or three letters (ISO 639-3), and optionally has one or more subtags separated by hyphens. The code you entered conforms to this, but that doesn't necessarily mean that it is a <i>valid</i> language code."))
     if results["actual"]:
         content.append("✔️ This seems to be a code for an actual language.")
+        content.insert(0, "<div class='langname'><code>{0}</code>: {1}</div>".format(results["lang"], results["languagename"]))
     else:
         content.append("❌ This doesn't seem to be an actual language code." + infobutton.format("actual"))
         content.append(infobox.format("actual", "This means that there is currently no item on Wikidata with this language code. Since there could be shortcomings in the data on Wikidata, please verify the language code with the SIL link on the right."))
