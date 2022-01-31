@@ -184,7 +184,7 @@ def get_everything(langcode):
     
     if get_code_data(lang):
         res["actual"] = get_code_data(lang)["origin"]["qid"]
-        res["languagename"] = get_code_data(lang)["destination"]["preferredSitelink"]["title"]
+        res["languagename"] = get_code_data(lang)["destination"]["preferedSitelink"]["title"]
     
     twnstats = get_twn_stats(code)
     groups_to_find = ["core-0-mostused", "core", "ext-proofreadpage-user", "ext-collection-user", "wikimedia-main", "out-wikimedia-mobile-wikipedia-android-strings", "out-wikimedia-mobile-wikipedia-ios"]
@@ -212,7 +212,6 @@ def encapsulate_p(x):
         return "<p>" + x + "</p>"
 
 def statblurb(code, stats, group, displaystats=True):
-    print(stats)
     groupnames = {
         "core-0-mostused": "Most important messages",
         "core": "MediaWiki core messages",
