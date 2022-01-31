@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title {% block title_tag_attributes %}{% endblock title_tag_attributes %}>Language code lookup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='tool.css') }}">
+    <link rel="index" href="{{ url_for('index') }}">
+    <script>
+    document.addEventListener( 'DOMContentLoaded', function() {
+      let newlangcode = document.getElementById( 'langcode' );
+      let form = document.getElementById( 'langcodeform' );
+      form.addEventListener( 'submit', function( e ) {
+        e.preventDefault();
+        if ( newlangcode.value ) {
+          window.location.href = "http://127.0.0.1:5000/" + newlangcode.value;
+        }
+      });
+      
+      let infobuttons = document.querySelectorAll( '.infobutton' );
+      infobuttons.forEach( function( infobutton ) {
+        infobutton.addEventListener( 'click', function( e ) {
+          let target = infobutton.getAttribute( 'data-target' );
+          let targetElem = document.getElementById( 'infobox-' + target );
+          targetElem.classList.toggle( 'open' );
+        });
+      });
+    });
+    </script>
+  </head>
+  <body>
+    <a href="#main" class="sr-only sr-only-focusable">Skip to main content</a>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+      <a href="{{ url_for('index') }}" class="navbar-brand">Language code lookup</a>
+      <button hidden class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsible-menu" aria-controls="collapsible-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="collapsible-menu" class="nojs">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item"><a href="//toolforge.org/" class="nav-link">Wikimedia Toolforge</a></li>
+          <li class="nav-item"><a href="https://github.com/jhsoby/codelookup/" class="nav-link">Source code</a></li>
+        </ul>
+      </div>
+    </nav>
+    <main id="main" {% block main_tag_attributes %}class="container mt-3"{% endblock main_tag_attributes %}>
+      {% block langcode %}
+      <form autocapitalize="off" id="langcodeform">
+        <label>
+          Language code to check: 
+          <input id="langcode" name="langcode" value="{{ langcode }}">
+        </label>
+        <button id="submit" type="submit" class="btn btn-primary" title="Search">Check</button>
+      </form>
+      {% endblock langcode %}
+      {% if content %}
+      <div>{{ content }}</div>
+      {% endif %}
+    </main>
+    <script>
+    document.querySelectorAll( 'svg.progress-ring' ).forEach( function( item ) {
+      const circle = item.querySelector( '.progress-ring__circle' );
+      const radius = circle.r.baseVal.value;
+      const circumference = radius * 2 * Math.PI;
+      const percentage = item.getAttribute( 'data-percentage' );
+      const offset = circumference - percentage / 100 * circumference;
+      circle.style.strokeDashoffset = offset;
+    });
+    </script>
+    <script defer src="{{ url_for('static', filename='menu.js') }}"></script>
+  </body>
+</html>

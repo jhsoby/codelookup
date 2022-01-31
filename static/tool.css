@@ -1,0 +1,115 @@
+body {
+    text-align: start;
+}
+
+#collapsible-menu.nojs {
+    display: flex;
+    flex-grow: 1;
+}
+
+nav.navbar {
+  position: sticky;
+  top: 0;
+}
+
+.statlink {
+  margin-right: 1em;
+}
+
+#langcodeform {
+  text-align: center;
+  margin: 3em;
+}
+
+#langcode {
+  font-family: var(--font-family-monospace);
+}
+
+div.verifybox {
+  width: 20rem;
+  max-width: 20rem;
+  float: right;
+  box-shadow: 0 15px 45px #aaa, 0 5px 5px 0px #ccc;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+div.verifybox ul {
+  margin-bottom: 0;
+}
+
+div.groupstatbox {
+  margin: 0 0 1em 2em;
+}
+
+td.row-project {
+  background-repeat: no-repeat;
+  background-size: 24px;
+  background-position: left center;
+  padding-left: 30px;
+}
+
+.infobutton {
+  margin: 0 1em;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.2s;
+}
+
+.infobutton:hover {
+  opacity: 1;
+}
+
+aside {
+  border: 1px solid #ccc;
+  background-color: rgba(0,0,0,0.05);
+  margin: 0 0 1em 2em;
+  max-width: 30em;
+  padding: 1em;
+  border-radius: 1em;
+  opacity: 0;
+  transition: opacity 2s;
+  display: none;
+}
+aside.open {
+  display: block;
+  opacity: 1;
+}
+
+.row-wiki {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/8/80/Wikipedia-logo-v2.svg");
+}
+
+.row-wiktionary {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/e/ec/Wiktionary-logo.svg");
+}
+
+.row-wikibooks {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/f/fa/Wikibooks-logo.svg");
+}
+
+.row-wikinews {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/2/24/Wikinews-logo.svg");
+}
+
+.row-wikiquote {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/f/fa/Wikiquote-logo.svg");
+}
+
+.row-wikisource {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4c/Wikisource-logo.svg");
+}
+
+.row-wikiversity {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/9/91/Wikiversity-logo.svg");
+}
+
+.row-wikivoyage {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/8/8a/Wikivoyage-logo.svg");
+}
+
+.progress-ring__circle {
+  transition: stroke-dashoffset 2s;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
