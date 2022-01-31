@@ -184,7 +184,10 @@ def get_everything(langcode):
     
     if get_code_data(lang):
         res["actual"] = get_code_data(lang)["origin"]["qid"]
-        res["languagename"] = get_code_data(lang)["destination"]["preferedSitelink"]["title"]
+        try:
+            res["languagename"] = get_code_data(lang)["destination"]["preferedSitelink"]["title"]
+        except:
+            continue
     
     twnstats = get_twn_stats(code)
     groups_to_find = ["core-0-mostused", "core", "ext-proofreadpage-user", "ext-collection-user", "wikimedia-main", "out-wikimedia-mobile-wikipedia-android-strings", "out-wikimedia-mobile-wikipedia-ios"]
