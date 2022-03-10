@@ -348,7 +348,7 @@ def build_content(langcode):
 @app.route("/", methods=["GET", "POST"], defaults={"path": ""})
 @app.route("/<path>", methods=["GET", "POST"])
 def index(path):
-    if path == '' and 'langcode' in request.args:
+    if 'langcode' in request.args:
         return redirect(url_for('index', path=request.args['langcode']))
     path = path[:20]
     return render_template("index.html", langcode=path, content=build_content(path))
