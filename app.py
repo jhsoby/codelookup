@@ -276,6 +276,7 @@ def build_content(langcode):
         if results["actual"]:
             verifybox += "<li><a href='https://hub.toolforge.org/{}?property=P1394'>Glottolog</a></li>\n".format(results["actual"])
             verifybox += "<li><a href='https://www.wikidata.org/entity/{}'>Wikidata</a></li>\n".format(results["actual"])
+            verifybox += "<li><a href='https://en.wikipedia.org/wiki/ISO_639:{}'>English Wikipedia</a></li>\n".format(results["actual"])
         verifybox += "<li><a href='https://r12a.github.io/app-subtags/?check={}'>BCP47 subtag lookup</a></li>".format(results["code"])
         verifybox += "</ul>\n</div>\n"
         content.append(verifybox)
