@@ -1,0 +1,156 @@
+{% macro infobutton(target) -%}
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/OOjs_UI_icon_help.svg" class="infobutton" data-target="{{ target }}">
+{%- endmacro %}
+
+{% macro infobox(x) -%}
+  <aside id="infobox-{{ x }}">{{ caller() }}</aside>
+{%- endmacro %}
+
+{% macro progressRing(percentage, statGroup) -%}
+  <svg class="progress-ring" height="30" width="30" data-percentage="{{ percentage }}">
+    <linearGradient id="{{ statGroup }}" gradientTransform="rotate(45)">
+      <stop offset="0%" stop-color="#2a4b8d" />
+      <stop offset="100%" stop-color="#36c" />
+    </linearGradient>
+    <circle class="progress-ring__bg" stroke-width="3" fill="transparent" r="8" cx="15" cy="15" stroke="#ddd" />
+    <circle class="progress-ring__circle" stroke-width="5" fill="transparent" r="8" cx="15" cy="15" stroke="url('#{{ statGroup }}')" stroke-dasharray="50.265" stroke-dashoffset="50.265" />
+  </svg>
+{%- endmacro %}
+
+{% macro statblurb(code, stats, group, displaystats=True) -%}
+  {% set groupnames = {
+    'core-0-mostused': 'Most important messages',
+    'core': 'MediaWiki core messages',
+    'ext-collection-user': 'Collection extension',
+    'ext-proofreadpage-user': 'ProofreadPage extension',
+    'wikimedia-main': 'Main extensions used by Wikimedia',
+    'out-wikimedia-mobile-wikipedia-android-strings': 'Android Wikipedia app',
+    'out-wikimedia-mobile-wikipedia-ios': 'iOS Wikipedia app'
+  } %}
+
+  {% set title -%}
+    {{ stats['percentage'] }} %: {{ stats['translated'] }} / {{ stats['total'] }} messages
+  {%- endset %}
+
+  <span class="statlink">
+    {{ progressRing(stats['percentage'], 'stat-' + group) }} <a
+      href="https://translatewiki.net/wiki/Special:Translate?language={{ code }}&group={{ group }}"
+      {% if not displaystats %}title="{{ title }}"{% endif %}>{{ groupnames[group] }}</a>{% if displaystats %}: {{ title }}{% endif %}
+  </span>
+{%- endmacro %}
+
+{% macro buildContent(langcode, results) -%}
+  {% if not results['wellformed'] -%}
+    <p>&#10006; <code>{{ langcode }}</code> is not a well-formed language code. {{ infobutton('wellformed') }}</p>
+    {% call infobox('wellformed') -%}
+      A well-formed language code conists of 2 letters (ISO 639-1) or three letters (ISO 639-3), and optionally has one or more subtags separated by hyphens. The code you entered does not conform to this.
+    {%- endcall %}
+  {%- else -%}
+    {% if results['actual'] -%}
+      <div class="langname"><code>{{ results['lang'] }}</code>: {{ results['languagename'] }}</div>
+    {%- endif %}
+    <div id="verifybox">
+      Verify this language code:
+      <ul>
+        {% if results['lang'] | length == 3 -%}
+          <li><a href="https://iso639-3.sil.org/code/{{ results['lang'] }}">SIL (ISO 639-3 RA)</a></li>
+        {%- endif %}
+        {% if results['actual'] -%}
+          <li><a href="https://hub.toolforge.org/{{ results['actual'] }}?property=P1394">Glottolog</a></li>
+          <li><a href="https://www.wikidata.org/entity/{{ results['actual'] }}">Wikidata</a></li>
+          <li><a href="https://en.wikipedia.org/wiki/ISO_639:{{ results['actual'] }}">English Wikipedia</a></li>
+        {%- endif %}
+        <li><a href="https://r12a.github.io/app-subtags/?check={{ results['code'] }}">BCP47 subtag lookup</a></li>
+      </ul>
+    </div>
+    <p>&#10004; <code>{{ langcode }}</code> is a well-formed language code. {{ infobutton('wellformed') }}</p>
+    {% call infobox('wellformed') -%}
+      A well-formed language code consists of 2 letters (ISO 639-1) or three letters (ISO 639-3), and optionally has one or more subtags separated by hyphens. The code you entered conforms to this, but that doesn't necessarily mean that it is a <i>valid</i> language code.
+    {%- endcall %}
+    {% if results['actual'] -%}
+      <p>&#10004; This seems to be a code for an actual language.</p>
+    {%- else -%}
+      <p>&#10006; This doesn't seem to be an actual language code. {{ infobutton('actual') }}</p>
+      {% call infobox('actual') -%}
+        This means that there is currently no item on Wikidata with this language code. Since there could be shortcomings in the data on Wikidata, please verify the language code with the SIL link on the right.
+      {%- endcall %}
+    {%- endif %}
+    {% if results['twn-enabled'] -%}
+      <p>&#10004; This language code is enabled <a href="https://translatewiki.net/wiki/Portal:{{ langcode }}">on Translatewiki</a>.</p>
+      <div class="groupstatbox">
+        {% for group in results['groupstats'] -%}
+          {{ statblurb(results['code'], results['groupstats'][group], group) }}<br>
+        {%- endfor %}
+      </div>
+    {%- else -%}
+      <p>&#10006; This language code is not enabled on Translatewiki. {{ infobutton('twnenabled') }}</p>
+      {% call infobox('twnenabled') -%}
+        In order to enable a language for translation on Translatewiki, you need to request that it be added on <a href="https://translatewiki.net/wiki/Support">the Support page</a>. Translatewiki is independent of Wikimedia wikis, so you may need to <a href="https://translatewiki.net/">register an account</a> there first.<br><br>Please only request a language if you know it well and intend to translate into it.
+      {%- endcall %}
+    {%- endif %}
+    {% if results['mw-enabled'] -%}
+      <p>&#10004; This language code is available for general use in MediaWiki.</p>
+    {%- else -%}
+      <p>&#10006; This language is not yet available for general use in MediaWiki. {{ infobutton('mwenabled') }}</p>
+      {% call infobox('mwenabled') -%}
+        The best way to make a language code available for general use in MediaWiki is to complete the <a href="https://translatewiki.net/wiki/Special:Translate?language={{ results['code'] }}&group=core-0-mostused">translation of the most important messages</a> into that language.
+      {%- endcall %}
+    {%- endif %}
+    {% if results['wd-enabled'] -%}
+      <p>&#10004; This language is available for general use on Wikidata.</p>
+    {%- else -%}
+      <p>&#10006; This language is not yet available for general use on Wikidata. {{ infobutton('wdenabled') }}</p>
+      {% call infobox('wdenabled') -%}
+        The best way to enable a language code for Wikidata is the same as for MediaWiki: <a href="https://translatewiki.net/wiki/Special:Translate?language={{ results['code'] }}&group=core-0-mostused">Translate the most important messages</a> into that language. However, if you are not able to do that for some reason, but the language code is still needed in Wikidata, you can see the appropriate steps to take on <a href="https://www.wikidata.org/wiki/Special:MyLanguage/Help:Monolingual_text_languages">Help:Monolingual text languages</a>.
+      {%- endcall %}
+    {%- endif %}
+    {{ buildContentTable(results) }}
+  {% endif %}
+{%- endmacro %}
+
+{% macro buildContentTable(results) -%}
+  {% set incubator = 'https://incubator.wikimedia.org/wiki/' %}
+  {% set projectmatrix = {
+    'wiki': ('Wikipedia', 'https://{}.wikipedia.org/', incubator + 'Wp/{}'),
+    'wiktionary': ('Wiktionary', 'https://{}.wiktionary.org/', incubator + 'Wt/{}'),
+    'wikibooks': ('Wikibooks', 'https://{}.wikibooks.org/', incubator + 'Wb/{}'),
+    'wikiquote': ('Wikiquote', 'https://{}.wikiquote.org/', incubator + 'Wq/{}'),
+    'wikisource': ('Wikisource', 'https://{}.wikisource.org/', 'https://wikisource.org/wiki/Main_Page/{}'),
+    'wikiversity': ('Wikiversity', 'https://{}.wikiversity.org/', 'https://beta.wikiversity.org/wiki/'),
+    'wikivoyage': ('Wikivoyage', 'https://{}.wikivoyage.org/', incubator + 'Wy/{}')
+  } %}
+  <table class='table'>
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Localization status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for project, site in results['wm-sites'].items() -%}
+        <tr>
+          <td class="row-project row-{{ project }}">
+            {%- if site -%}
+              <a href="{{ projectmatrix[project][1].format(results['sitecode']) }}">{{ site }}</a>
+            {%- else -%}
+              {{ projectmatrix[project][0] }} (<a href="{{ projectmatrix[project][2].format(results['code']) }}">Incubator</a>)
+            {%- endif -%}
+          </td>
+          <td>
+            {%- if results['groupstats'] | length == 0 -%}
+              <i>The language is not enabled in Translatewiki.</i>
+            {%- else -%}
+              {{ statblurb(results['code'], results['groupstats']['core-0-mostused'], 'core-0-mostused', False) }}
+              {{ statblurb(results['code'], results['groupstats']['core'], 'core', False) }}
+              {% if project in ('wikibooks', 'wikisource') -%}
+                {{ statblurb(results['code'], results['groupstats']['ext-collection-user'], 'ext-collection-user', False) }}
+              {%- elif project == 'wikisource' -%}
+                {{ statblurb(results['code'], results['groupstats']['ext-proofreadpage-user'], 'ext-proofreadpage-user', False) }}
+              {%- endif %}
+            {%- endif -%}
+          </td>
+        </tr>
+      {%- endfor %}
+    </tbody>
+  </table>
+{%- endmacro %}
