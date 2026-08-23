@@ -58,7 +58,7 @@
         {% if results['actual'] -%}
           <li><a href="https://hub.toolforge.org/{{ results['actual'] }}?property=P1394">Glottolog</a></li>
           <li><a href="https://www.wikidata.org/entity/{{ results['actual'] }}">Wikidata</a></li>
-          <li><a href="https://en.wikipedia.org/wiki/ISO_639:{{ results['actual'] }}">English Wikipedia</a></li>
+          <li><a href="https://en.wikipedia.org/wiki/ISO_639:{{ results['code'] }}">English Wikipedia</a></li>
         {%- endif %}
         <li><a href="https://r12a.github.io/app-subtags/?check={{ results['code'] }}">BCP47 subtag lookup</a></li>
       </ul>
