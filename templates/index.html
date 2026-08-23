@@ -14,10 +14,10 @@
       form.addEventListener( 'submit', function( e ) {
         e.preventDefault();
         if ( newlangcode.value ) {
-          window.location.href = "http://codelookup.toolforge.org/" + newlangcode.value;
+          window.location.href = window.location.origin + '/' + newlangcode.value;
         }
       });
-      
+
       let infobuttons = document.querySelectorAll( '.infobutton' );
       infobuttons.forEach( function( infobutton ) {
         infobutton.addEventListener( 'click', function( e ) {
@@ -26,7 +26,7 @@
           targetElem.classList.toggle( 'open' );
         });
       });
-      
+
       document.querySelectorAll( 'svg.progress-ring' ).forEach( function( item ) {
         const circle = item.querySelector( '.progress-ring__circle' );
         const radius = circle.r.baseVal.value;
@@ -56,15 +56,18 @@
       {% block langcode %}
       <form autocapitalize="off" id="langcodeform">
         <label>
-          Language code to check: 
+          Language code to check:
           <input id="langcode" name="langcode" value="{{ langcode }}">
         </label>
         <button id="submit" type="submit" class="btn btn-primary" title="Search">Check</button>
       </form>
       {% endblock langcode %}
-      {% if content %}
-      <div>{{ content }}</div>
-      {% endif %}
+      {% if results -%}
+        {%- from '_helpers.html' import buildContent with context -%}
+        <div>
+          {{ buildContent(langcode, results) }}
+        </div>
+      {%- endif %}
     </main>
     <script defer src="{{ url_for('static', filename='menu.js') }}"></script>
   </body>
